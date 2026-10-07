@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>deafault — Falling and other apps</title>
+<meta name="description" content="deafault is an independent app studio. Its first app, Falling, turns a piano performance into a synchronized falling-note video. Record from your digital piano, render a studio-quality MP4 in seconds.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect x='4' y='2' width='6' height='18' rx='2' fill='%2378a8ff'/><rect x='13' y='8' width='6' height='14' rx='2' fill='%23ff8fb1'/><rect x='22' y='4' width='6' height='12' rx='2' fill='%2378a8ff'/><rect x='2' y='26' width='28' height='4' rx='1' fill='%23e8e8f0'/></svg>">
+<style>
+  :root {
+    --bg: #0b0b12;
+    --panel: #14141f;
+    --text: #ececf3;
+    --muted: #9a9ab0;
+    --line: #26263a;
+    --left: #78a8ff;
+    --right: #ff8fb1;
+    --accent: #ffd36e;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
+  }
+  a { color: var(--accent); }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 20px; }
+  nav { display: flex; justify-content: space-between; align-items: center; padding: 22px 0; }
+  .logo { font-weight: 700; letter-spacing: .02em; font-size: 20px; color: var(--text); text-decoration: none; }
+  .logo span { color: var(--right); }
+  nav a.cta { font-size: 14px; color: var(--text); text-decoration: none; border: 1px solid var(--line); padding: 8px 14px; border-radius: 999px; }
+
+  .hero { display: grid; grid-template-columns: 1.1fr 1fr; gap: 48px; align-items: center; padding: 48px 0 72px; }
+  h1 { font-size: clamp(34px, 5vw, 54px); line-height: 1.08; margin: 0 0 18px; letter-spacing: -.02em; }
+  h1 em { font-style: normal; background: linear-gradient(90deg, var(--left), var(--right)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .lede { color: var(--muted); font-size: 18px; margin: 0 0 28px; max-width: 34em; }
+  .btn { display: inline-block; background: var(--text); color: var(--bg); text-decoration: none; font-weight: 600; padding: 12px 20px; border-radius: 10px; }
+
+  /* falling-note stage */
+  .stage { position: relative; height: 360px; border-radius: 16px; overflow: hidden; background: linear-gradient(#0f0f1a, #151527); border: 1px solid var(--line); }
+  .lane { position: absolute; top: 0; bottom: 56px; width: 6.25%; }
+  .bar { position: absolute; left: 12%; right: 12%; top: -40%; border-radius: 4px; animation: fall linear infinite; box-shadow: 0 0 14px currentColor; }
+  .bar.l { background: var(--left); color: var(--left); }
+  .bar.r { background: var(--right); color: var(--right); }
+  @keyframes fall { from { transform: translateY(0); } to { transform: translateY(420px); } }
+  .keys { position: absolute; left: 0; right: 0; bottom: 0; height: 56px; display: flex; background: #e8e8f0; border-top: 3px solid var(--accent); }
+  .keys i { flex: 1; border-right: 1px solid #b9b9c8; }
+  @media (prefers-reduced-motion: reduce) { .bar { animation: none; top: 30%; } }
+
+  section { padding: 56px 0; border-top: 1px solid var(--line); }
+  h2 { font-size: 28px; margin: 0 0 8px; letter-spacing: -.01em; }
+  .sub { color: var(--muted); margin: 0 0 32px; }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 22px; }
+  .card h3 { margin: 0 0 6px; font-size: 17px; }
+  .card p { margin: 0; color: var(--muted); font-size: 15px; }
+  .step { font-size: 13px; font-weight: 700; color: var(--accent); letter-spacing: .08em; text-transform: uppercase; margin-bottom: 8px; }
+  ul.check { list-style: none; padding: 0; margin: 0; columns: 2; column-gap: 32px; }
+  ul.check li { padding: 6px 0 6px 26px; position: relative; break-inside: avoid; color: var(--muted); }
+  ul.check li::before { content: ""; position: absolute; left: 0; top: 13px; width: 12px; height: 12px; border-radius: 3px; background: linear-gradient(var(--left), var(--right)); }
+  ul.check b { color: var(--text); font-weight: 600; }
+  video.demo { width: 100%; aspect-ratio: 16 / 9; border-radius: 14px; border: 1px solid var(--line); background: #000; display: block; }
+  footer { padding: 36px 0 48px; color: var(--muted); font-size: 14px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+
+  @media (max-width: 820px) {
+    .hero { grid-template-columns: 1fr; padding-top: 24px; }
+    .grid { grid-template-columns: 1fr; }
+    ul.check { columns: 1; }
+    .stage { height: 280px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav>
+    <a class="logo" href="#">dea<span>f</span>ault</a>
+    <a class="cta" href="mailto:hello@deafault.in">Get in touch</a>
+  </nav>
+
+  <div class="hero">
+    <div>
+      <div class="step">Falling · a deafault app</div>
+      <h1>Play the piano.<br>Get the <em>falling-note video</em>.</h1>
+      <p class="lede">Falling turns a piano performance into a polished, perfectly synced falling-note video — the kind you see on piano YouTube — without a game engine, a video editor, or an afternoon of manual alignment.</p>
+      <a class="btn" href="mailto:hello@deafault.in?subject=Falling%20early%20access">Request early access</a>
+    </div>
+    <div class="stage" aria-hidden="true" id="stage">
+      <div class="keys"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    </div>
+  </div>
+
+  <section>
+    <h2>See it</h2>
+    <p class="sub">Rendered by Falling, unedited: 22 seconds of piano, 795 frames, rendered in 6 seconds.</p>
+    <video class="demo" src="media/demo.mp4" poster="media/poster.jpg" controls playsinline preload="none"></video>
+  </section>
+
+  <section>
+    <h2>How it works</h2>
+    <p class="sub">From your keyboard to a finished video in one step.</p>
+    <div class="grid">
+      <div class="card"><div class="step">1 · Record</div><h3>Capture straight from your piano</h3><p>Plug in a digital piano over USB. Falling records every note, velocity and pedal over Web MIDI, and the microphone audio alongside it, on one clock.</p></div>
+      <div class="card"><div class="step">2 · Render</div><h3>Deterministic, fast video</h3><p>A headless rendering pipeline draws every frame in parallel across CPU cores and encodes to MP4 or ProRes. A 25-second piece renders at 720p60 in about the time it takes to play it.</p></div>
+      <div class="card"><div class="step">3 · Share</div><h3>Synced and ready to post</h3><p>Audio is aligned to the notes automatically, hands are colored separately, and themes set the look. The result is ready for YouTube, Reels or a lesson.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Built to improve itself</h2>
+    <p class="sub">Every render can be rated. Bad results become fixes.</p>
+    <ul class="check">
+      <li><b>Feedback dataset.</b> Users flag a bad render (wrong hand colors, audio drift) and the inputs are captured as a reproducible sample.</li>
+      <li><b>AI repair agent.</b> An LLM agent, Claude among the supported models, reads the diagnostic report, patches the pipeline and runs the full test suite before anything ships.</li>
+      <li><b>Guardrail tests.</b> Every fixed defect becomes a permanent regression test, so quality only moves one way.</li>
+      <li><b>Automated tuning loop.</b> An experimental search loop proposes changes to the audio pipeline in sandboxes, scores them against ground truth, and keeps only the winners.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Features</h2>
+    <p class="sub">Shipping today.</p>
+    <ul class="check">
+      <li><b>Web app</b>: drag in a MIDI file and audio, watch progress live</li>
+      <li><b>Flat and 2.5D perspective</b> renderers</li>
+      <li><b>Automatic audio sync</b>, with no manual offset</li>
+      <li><b>Left/right hand coloring</b> with smart hand splitting</li>
+      <li><b>11 themes</b>, from classic to synthwave</li>
+      <li><b>Built-in grand piano synth</b> when you only have MIDI</li>
+      <li><b>H.264 and ProRes</b> output, up to 1080p and beyond</li>
+      <li><b>Reproducible</b>: the same input always gives identical pixels</li>
+    </ul>
+  </section>
+
+  <footer>
+    <span>© 2026 deafault · an independent app studio</span>
+    <span><a href="mailto:hello@deafault.in">hello@deafault.in</a></span>
+  </footer>
+</div>
+
+<script>
+  // Decorative falling bars: each lane gets a few bars with staggered timing.
+  (function () {
+    var stage = document.getElementById('stage');
+    for (var i = 0; i < 16; i++) {
+      var lane = document.createElement('div');
+      lane.className = 'lane';
+      lane.style.left = (i * 6.25) + '%';
+      var n = 1 + (i * 7 % 3);
+      for (var j = 0; j < n; j++) {
+        var bar = document.createElement('div');
+        bar.className = 'bar ' + (i < 8 ? 'l' : 'r');
+        var dur = 3 + ((i * 13 + j * 5) % 4);
+        bar.style.height = (14 + ((i * 17 + j * 11) % 30)) + '%';
+        bar.style.animationDuration = dur + 's';
+        bar.style.animationDelay = (-((i * 0.37 + j * 1.9) % dur)) + 's';
+        lane.appendChild(bar);
+      }
+      stage.appendChild(lane);
+    }
+  })();
+</script>
+</body>
+</html>
